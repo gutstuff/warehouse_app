@@ -29,6 +29,9 @@ class OrderService
             $productOrder = new ProductOrder();
             $productOrder->setOrder($order);
 
+            if (!is_int($item['productId'])) {
+                continue;
+            }
             $product = $productRepository->find($item['productId']);
             if (!$product) {
                 continue;
@@ -48,5 +51,31 @@ class OrderService
         $this->entityManager->persist($order);
         $this->entityManager->flush();
         return true;
+    }
+
+    public function getOrder(int $id): ?array
+    {
+        $orderRepository = $this->entityManager
+            ->getRepository(Order::class);
+
+        if (!($order = $orderRepository->find($id))) {
+            return null;
+        }
+
+        $orders = [];
+
+
+        foreach ($order->getProductOrders() as $productOrder) {
+            $orders []= [
+                'productId' => $productOrder->getProduct()->getId(),
+                'count' => $productOrder->getCount()
+            ];
+        }
+
+        return [
+            'description' => $order->getDescription(),
+            'date_created' => $order->getDateCreated(),
+            'orders' => $orders
+        ];
     }
 }

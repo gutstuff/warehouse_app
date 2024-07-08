@@ -24,31 +24,39 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/order/new', name: 'app_new_order')]
+    #[Route('/order/new', name: 'app_new_order', methods: ['POST'])]
     public function newOrder(Request $request): JsonResponse
     {
-        if (
-            $request->getMethod() !== 'POST'
-        ) {
-            return new JsonResponse([
-                    'message' => 'error'
-                ], 500
-            );
+        $payload = $request->getPayload();
+        $input = [
+            'description' => $payload->getString('description'),
+            'orders' => $payload->all('orders')
+        ];
+        $this->orderService->createOrder($input);
+
+        return new JsonResponse($input);
+    }
+
+    #[Route('/order/{id}', name: 'app_get_order', methods: ['GET'])]
+    public function getOrder(Request $request): JsonResponse
+    {
+        $id = $request->get('id');
+        if (!is_numeric($id) || $id < 1) {
+            return $this->jsonErrorResponse('Wrong order id');
         }
 
-        $payload = $request->getPayload();
-        $this->orderService->createOrder(
-            [
-                'description' => $payload->getString('description'),
-                'orders' => $payload->all('orders')
-            ]
-        );
+        if (!($order = $this->orderService->getOrder($id))) {
+            return $this->jsonErrorResponse('Order not found');
+        }
 
-        return new JsonResponse(
-            [
-                'description' => $payload->getString('description'),
-                'orders' => $payload->all('orders')
-            ]
+        return new JsonResponse($order);
+    }
+
+    private function jsonErrorResponse(string $message): JsonResponse
+    {
+        return new JsonResponse([
+                'message' => $message
+            ], 500
         );
     }
 }
