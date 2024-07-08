@@ -31,3 +31,58 @@ symfony serve
 Serwer jest dostępny pod linkiem:
 [127.0.0.1:8000](http://127.0.0.1:8000)
 
+
+## Zapytania
+
+### Nowe zamówienie
+
+POST /order/new
+body:
+```json
+{
+	"description": "Specjalne zamówienie xyz",
+	"orders": [
+		{
+			"productId": 1,
+			"count": 2
+		},
+		{
+			"productId": 2,
+			"count": 1
+		}
+	]
+}
+```
+`description` (opjonalne) - Opis zamówienia.
+
+`orders` - Tablica zamawianych produków. Obiekt musi zawierać
+pole `productId` - id produktu oraz `count` - ilość zamawianego produktu.
+
+odpowiedź:
+
+Udane zamówienie zwraca format json taki sam jak format wejściowy
+
+### Pobranie instniejącego zamówienia
+
+GET /order/{id}
+`{id}` - id zamówienia
+
+przykładowa odpowiedź:
+
+`GET /order/2`
+
+```json
+{
+	"description": "Specjalne zamówienie xyz",
+	"orders": [
+		{
+			"productId": 1,
+			"count": 2
+		},
+		{
+			"productId": 2,
+			"count": 1
+		}
+	]
+}
+```
