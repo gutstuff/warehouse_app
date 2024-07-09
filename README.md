@@ -40,20 +40,20 @@ przykładowa odpowiedź:
 
 ```json
 [
-	{
-		"product_id": 1,
-		"name": "Ołówek",
-		"description": "-",
-		"stock_availability": 2,
-		"net_price": 2
-	},
-	{
-		"product_id": 2,
-		"name": "Długopis",
-		"description": "-",
-		"stock_availability": 3,
-		"net_price": 5
-	}
+  {
+    "product_id": 1,
+    "name": "Ołówek",
+    "description": "-",
+    "stock_availability": 2,
+    "net_price": 2
+  },
+  {
+    "product_id": 2,
+    "name": "Długopis",
+    "description": "-",
+    "stock_availability": 3,
+    "net_price": 5
+  }
 ]
 ```
 
@@ -120,34 +120,30 @@ przykładowa odpowiedź:
 
 przykładowa odpowiedź:
 
-`GET /order/2`
+`GET /order/7`
 
 ```json
 {
-  "description": "Specjalne zamówienie xyz",
+  "description": "Zamówienie dla xyz",
   "date_created": {
-    "date": "2024-07-04 15:48:44.000000",
+    "date": "2024-07-09 14:45:04.000000",
     "timezone_type": 3,
     "timezone": "UTC"
   },
   "orders": [
     {
-      "product_id": 1,
+      "name": "Ołówek",
       "count": 2,
-      "net_price": 5,
-      "sum": 10,
-      "sum_vat": 12.3
+      "sum_vat": 4.92
     },
     {
-      "product_id": 2,
+      "name": "Długopis",
       "count": 1,
-      "net_price": 7,
-      "sum": 7,
-      "sum_vat": 8.61
+      "sum_vat": 6.15
     }
   ],
   "count_all": 3,
-  "sum": 17,
-  "sum_vat": 20.91
+  "sum": 9,
+  "sum_vat": 11.07
 }
 ```
