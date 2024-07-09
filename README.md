@@ -10,6 +10,12 @@ sudo apt update
 sudo apt install -y php-cli php-xml php-intl php-mbstring  php-mysql git mariadb-server
 ```
 
+Instalujemy symfony-cli oraz composer 
+
+symfony-cli: https://symfony.com/download
+
+composer: https://getcomposer.org/download/
+
 Następnie uruchamiamy skrypt do utwardzenia ustawień bazy. Hasło `root` zmieniamy na `password`
 
 ```
