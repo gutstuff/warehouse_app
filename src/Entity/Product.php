@@ -103,6 +103,8 @@ class Product
     public function setStockAvailability(?int $stockAvailability): static
     {
         $this->stockAvailability = $stockAvailability;
+
+        return $this;
     }
 
     /**
