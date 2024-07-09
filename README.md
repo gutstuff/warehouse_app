@@ -16,7 +16,7 @@ Następnie uruchamiamy skrypt do utwardzenia ustawień bazy. Hasło `root` zmien
 sudo mysql_secure_installation
 ```
 
-Dodajemy używakownika `app` oraz bazę danych `app`
+Dodajemy użytkownika `app` oraz bazę danych `app`
 
 ```sql
 CREATE USER 'app'@'localhost' IDENTIFIED BY 'password';
