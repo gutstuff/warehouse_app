@@ -72,16 +72,30 @@ przykładowa odpowiedź:
 
 ```json
 {
-	"description": "Specjalne zamówienie xyz",
-	"orders": [
-		{
-			"productId": 1,
-			"count": 2
-		},
-		{
-			"productId": 2,
-			"count": 1
-		}
-	]
+  "description": "Specjalne zamówienie xyz",
+  "date_created": {
+    "date": "2024-07-04 15:48:44.000000",
+    "timezone_type": 3,
+    "timezone": "UTC"
+  },
+  "orders": [
+    {
+      "product_id": 1,
+      "count": 2,
+      "net_price": 5,
+      "sum": 10,
+      "sum_vat": 12.3
+    },
+    {
+      "product_id": 2,
+      "count": 1,
+      "net_price": 7,
+      "sum": 7,
+      "sum_vat": 8.61
+    }
+  ],
+  "count_all": 3,
+  "sum": 17,
+  "sum_vat": 20.91
 }
 ```
