@@ -16,13 +16,13 @@ symfony-cli: https://symfony.com/download
 
 composer: https://getcomposer.org/download/
 
-Następnie uruchamiamy skrypt do utwardzenia ustawień bazy. Hasło `root` zmieniamy na `password`
+Następnie uruchamić skrypt do utwardzenia ustawień bazy.
 
 ```
 sudo mysql_secure_installation
 ```
 
-Dodajemy użytkownika `app` oraz bazę danych `app`
+Do bazy należy dodać użytkownika `app` oraz bazę danych `app`
 
 ```sql
 CREATE USER 'app'@'localhost' IDENTIFIED BY 'password';
