@@ -21,7 +21,6 @@ class OrderService
     {
         $order = new Order();
         $order->setDescription($data['description']);
-        $order->setNumber(1);
         $order->setDateCreated(new \DateTime());
 
         $productRepository = $this->entityManager
@@ -81,6 +80,7 @@ class OrderService
             $count_all += $productOrder->getCount();
             $orders []= [
                 'product_id' => $product->getId(),
+                'name' => $product->getName(),
                 'count' => $productOrder->getCount(),
                 'net_price' => floatval($product->getNetPrice()),
                 'sum' => $priceCalculator->calculate($productOrder),
