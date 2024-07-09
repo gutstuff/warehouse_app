@@ -3,26 +3,26 @@
 ## Konfiguracja środowiska rozwojowego
 
 ## Ubuntu 24.04 LTS
-Na początku należy zainstalować podstawowe pakiety oraz bazę danych
+Na początku należy zainstalować podstawowe pakiety oraz bazę danych:
 
 ```
 sudo apt update
 sudo apt install -y php-cli php-xml php-intl php-mbstring  php-mysql git mariadb-server
 ```
 
-Instalujemy symfony-cli oraz composer 
+Instalujemy symfony-cli oraz composer:
 
 symfony-cli: https://symfony.com/download
 
 composer: https://getcomposer.org/download/
 
-Następnie uruchamić skrypt do utwardzenia ustawień bazy.
+Następnie uruchomić skrypt do utwardzenia ustawień bazy:
 
 ```
 sudo mysql_secure_installation
 ```
 
-Do bazy należy dodać użytkownika `app` oraz bazę danych `app`
+Do bazy należy dodać użytkownika `app` oraz bazę danych `app`:
 
 ```sql
 CREATE USER 'app'@'localhost' IDENTIFIED BY 'password';
