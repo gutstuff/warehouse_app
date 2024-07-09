@@ -16,6 +16,17 @@ Następnie uruchamiamy skrypt do utwardzenia ustawień bazy. Hasło `root` zmien
 sudo mysql_secure_installation
 ```
 
+Dodajemy używakownika `app` oraz bazę danych `app`
+
+```sql
+CREATE USER 'app'@'localhost' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON app.* TO app@localhost IDENTIFIED BY "password";
+FLUSH PRIVILEGES;
+
+CREATE DATABASE IF NOT EXISTS app;
+```
+
 ```
 git clone https://github.com/gutstuff/warehouse_app.git warehouse_app
 cd warehouse_app
