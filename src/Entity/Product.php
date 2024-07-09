@@ -28,6 +28,9 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 2)]
     private ?string $netPrice = null;
 
+    #[ORM\Column]
+    private ?int $stockAvailability = null;
+
     /**
      * @var Collection<int, ProductOrder>
      */
@@ -90,6 +93,16 @@ class Product
         $this->netPrice = $netPrice;
 
         return $this;
+    }
+
+    public function getStockAvailability(): ?int
+    {
+        return $this->stockAvailability;
+    }
+
+    public function setStockAvailability(?int $stockAvailability): static
+    {
+        $this->stockAvailability = $stockAvailability;
     }
 
     /**
