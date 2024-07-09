@@ -29,12 +29,12 @@ class OrderController extends AbstractController
     {
         $payload = $request->getPayload();
         $input = [
-            'description' => $payload->getString('description'),
-            'orders' => $payload->all('orders')
+            OrderService::RESULT_DESCRIPTION => $payload->getString(OrderService::RESULT_DESCRIPTION),
+            OrderService::RESULT_ORDERS => $payload->all(OrderService::RESULT_ORDERS)
         ];
-        $this->orderService->createOrder($input);
+        $result = $this->orderService->createOrder($input);
 
-        return new JsonResponse($input);
+        return new JsonResponse($result['result'], $result['status']);
     }
 
     #[Route('/order/{id}', name: 'app_get_order', methods: ['GET'])]

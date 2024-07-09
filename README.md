@@ -68,11 +68,11 @@ body:
   "description": "Zamówienie dla xyz",
   "orders": [
     {
-      "productId": 1,
+      "product_id": 1,
       "count": 2
     },
     {
-      "productId": 2,
+      "product_id": 2,
       "count": 1
     }
   ]
@@ -81,11 +81,36 @@ body:
 `description` (opjonalne) - Opis zamówienia.
 
 `orders` - Tablica zamawianych produków. Obiekt musi zawierać
-pole `productId` - id produktu oraz `count` - ilość zamawianego produktu.
+pole `product_id` - id produktu oraz `count` - ilość zamawianego produktu.
 
 przykładowa odpowiedź:
 
-Udane zamówienie zwraca format json taki sam jak format wejściowy
+```json
+{
+  "id": 7,
+  "description": "Zamówienie dla xyz",
+  "date_created": {
+    "date": "2024-07-09 14:45:04.169562",
+    "timezone_type": 3,
+    "timezone": "UTC"
+  },
+  "orders": [
+    {
+      "count": 2,
+      "name": "Ołówek",
+      "sum_vat": 4.92
+    },
+    {
+      "count": 1,
+      "name": "Długopis",
+      "sum_vat": 6.15
+    }
+  ],
+  "count_all": 3,
+  "sum": 9,
+  "sum_vat": 11.07
+}
+```
 
 ### Pobranie instniejącego zamówienia
 

@@ -12,47 +12,114 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class OrderService
 {
+    public const RESULT_ORDERS = 'orders';
+    public const RESULT_DESCRIPTION = 'description';
+    private const RESULT_PRODUCT_ID = 'product_id';
+    private const RESULT_PRODUCT_COUNT = 'count';
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager
     )
     {}
 
-    public function createOrder(array $data): bool
+    private function validateNewOrder(array $data): bool
     {
+        if (
+            !is_array($data[self::RESULT_ORDERS])
+            || !count($data[self::RESULT_ORDERS])
+        ) {
+            return false;
+        }
+
+        $productRepository = $this->entityManager
+            ->getRepository(Product::class);
+
+        $productsToOrder = $data[self::RESULT_ORDERS];
+        foreach ($productsToOrder as $item) {
+            if (
+                !array_key_exists(self::RESULT_PRODUCT_ID, $item)
+                || !array_key_exists(self::RESULT_PRODUCT_COUNT, $item)
+                || !is_int($item[self::RESULT_PRODUCT_ID])
+                || !is_int($item[self::RESULT_PRODUCT_COUNT])
+                || !$productRepository->find($item[self::RESULT_PRODUCT_ID])
+            ) {
+                return false;
+            }
+
+            $stockAvailability = $productRepository
+                ->find($item[self::RESULT_PRODUCT_ID])->getStockAvailability();
+            if (
+                $item[self::RESULT_PRODUCT_COUNT] < 1
+                || $item[self::RESULT_PRODUCT_COUNT] > $stockAvailability
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function createOrder(array $data): array
+    {
+        if (!$this->validateNewOrder($data)) {
+            return ['status' => 500, 'result' => []];
+        }
+
         $order = new Order();
-        $order->setDescription($data['description']);
+        $order->setDescription($data[self::RESULT_DESCRIPTION] ?? '-');
         $order->setDateCreated(new \DateTime());
 
         $productRepository = $this->entityManager
             ->getRepository(Product::class);
 
-        $productsToOrder = $data['orders'];
-        foreach ($productsToOrder as $item) {
+        $vatPriceCalculator = new PriceCalculatorCollector([
+            new PolishVATPriceCalculator()
+        ]);
+
+        $productsToOrder = [];
+        $count_all = 0;
+        foreach ($data[self::RESULT_ORDERS] as $item) {
             $productOrder = new ProductOrder();
             $productOrder->setOrder($order);
 
-            if (!is_int($item['productId'])) {
-                continue;
-            }
-            $product = $productRepository->find($item['productId']);
-            if (!$product) {
-                continue;
-            }
+            $product = $productRepository->find($item[self::RESULT_PRODUCT_ID]);
             $productOrder->setProduct($product);
-
-            $count = $item['count'];
-            if (!is_int($count) || $count < 1)
-                $count = 1;
-            $productOrder->setCount($count);
-
+            $productOrder->setCount($item[self::RESULT_PRODUCT_COUNT]);
             $order->addProductOrder($productOrder);
 
             $this->entityManager->persist($productOrder);
+
+            unset($item[self::RESULT_PRODUCT_ID]);
+            $item['name'] = $product->getName();
+            $item['sum_vat'] = $vatPriceCalculator->calculate($productOrder);
+            $productsToOrder []= $item;
+
+            $count_all += $item[self::RESULT_PRODUCT_COUNT];
         }
 
         $this->entityManager->persist($order);
         $this->entityManager->flush();
-        return true;
+
+        $priceCalculator = new PriceCalculatorCollector([
+            new PriceCalculator()
+        ]);
+
+        return [
+            'status' => 200,
+            'result' => [
+                'id' => $order->getId(),
+                self::RESULT_DESCRIPTION => $order->getDescription(),
+                'date_created' => $order->getDateCreated(),
+                self::RESULT_ORDERS => $productsToOrder,
+                'count_all' => $count_all,
+                'sum' => $priceCalculator->calculateCollection(
+                    $order->getProductOrders()->toArray()
+                ),
+                'sum_vat' => $vatPriceCalculator->calculateCollection(
+                    $order->getProductOrders()->toArray()
+                ),
+            ]
+        ];
     }
 
     public function getOrder(int $id): ?array
@@ -79,19 +146,16 @@ class OrderService
             $product = $productOrder->getProduct();
             $count_all += $productOrder->getCount();
             $orders []= [
-                'product_id' => $product->getId(),
                 'name' => $product->getName(),
-                'count' => $productOrder->getCount(),
-                'net_price' => floatval($product->getNetPrice()),
-                'sum' => $priceCalculator->calculate($productOrder),
+                self::RESULT_PRODUCT_COUNT => $productOrder->getCount(),
                 'sum_vat' => $vatPriceCalculator->calculate($productOrder)
             ];
         }
 
         return [
-            'description' => $order->getDescription(),
+            self::RESULT_DESCRIPTION => $order->getDescription(),
             'date_created' => $order->getDateCreated(),
-            'orders' => $orders,
+            self::RESULT_ORDERS => $orders,
             'count_all' => $count_all,
             'sum' => $priceCalculator->calculateCollection(
                 $order->getProductOrders()->toArray()
