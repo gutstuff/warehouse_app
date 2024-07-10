@@ -42,7 +42,7 @@ composer install
 bin/console doc:mi:mi
 ```
 
-*Opcjonalne przykładowe dane*
+*(Opcjonalne) przykładowe dane (z dokumentacji):*
 
 ```sql
 INSERT INTO app.product (name, net_price, stock_availability) VALUES ('Ołówek', 2.00, 2);
