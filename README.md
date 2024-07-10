@@ -16,7 +16,7 @@ symfony-cli: https://symfony.com/download
 
 composer: https://getcomposer.org/download/
 
-Następnie uruchomić skrypt do utwardzenia ustawień bazy:
+**(Opcjonalnie) uruchomić skrypt do utwardzenia ustawień bazy:**
 
 ```
 sudo mysql_secure_installation
@@ -37,7 +37,16 @@ CREATE DATABASE IF NOT EXISTS app;
 git clone https://github.com/gutstuff/warehouse_app.git warehouse_app
 cd warehouse_app
 composer install
+# #lub polecenie:
+# symfony composer install
 bin/console doc:mi:mi
+```
+
+**Opcjonalne przykładowe dane**
+
+```sql
+INSERT INTO app.product (name, net_price, stock_availability) VALUES ('Ołówek', 2.00, 2);
+INSERT INTO app.product (name, net_price, stock_availability) VALUES ('Długopis', 5.00, 3);
 ```
 
 ## Uruchomienie
