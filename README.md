@@ -68,18 +68,18 @@ przykładowa odpowiedź:
 ```json
 [
   {
-    "product_id": 1,
+    "id": 1,
     "name": "Ołówek",
     "description": "-",
-    "stock_availability": 2,
-    "net_price": 2
+    "stockAvailability": 2,
+    "netPrice": 2
   },
   {
-    "product_id": 2,
+    "id": 2,
     "name": "Długopis",
     "description": "-",
-    "stock_availability": 3,
-    "net_price": 5
+    "stockAvailability": 3,
+    "netPrice": 5
   }
 ]
 ```
@@ -95,11 +95,11 @@ body:
   "description": "Zamówienie dla xyz",
   "orders": [
     {
-      "product_id": 1,
+      "id": 1,
       "count": 2
     },
     {
-      "product_id": 2,
+      "id": 2,
       "count": 1
     }
   ]
@@ -116,26 +116,22 @@ przykładowa odpowiedź:
 {
   "id": 7,
   "description": "Zamówienie dla xyz",
-  "date_created": {
-    "date": "2024-07-09 14:45:04.169562",
-    "timezone_type": 3,
-    "timezone": "UTC"
-  },
+  "dateCreated": "2024-07-09T21:38:05+00:00",
   "orders": [
     {
-      "count": 2,
       "name": "Ołówek",
-      "sum_vat": 4.92
+      "count": 2,
+      "sumVat": 4.92
     },
     {
-      "count": 1,
       "name": "Długopis",
-      "sum_vat": 6.15
+      "count": 1,
+      "sumVat": 6.15
     }
   ],
-  "count_all": 3,
+  "countAll": 0,
   "sum": 9,
-  "sum_vat": 11.07
+  "sumVat": 11.07
 }
 ```
 
@@ -151,26 +147,23 @@ przykładowa odpowiedź:
 
 ```json
 {
+  "id": 7,
   "description": "Zamówienie dla xyz",
-  "date_created": {
-    "date": "2024-07-09 14:45:04.000000",
-    "timezone_type": 3,
-    "timezone": "UTC"
-  },
+  "dateCreated": "2024-07-09T14:45:04+00:00",
   "orders": [
     {
       "name": "Ołówek",
       "count": 2,
-      "sum_vat": 4.92
+      "sumVat": 4.92
     },
     {
       "name": "Długopis",
       "count": 1,
-      "sum_vat": 6.15
+      "sumVat": 6.15
     }
   ],
-  "count_all": 3,
+  "countAll": 0,
   "sum": 9,
-  "sum_vat": 11.07
+  "sumVat": 11.07
 }
 ```
