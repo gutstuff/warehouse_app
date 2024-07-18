@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Dto\OrderInputDto;
 use App\Dto\OrderOutputDto;
 use App\Dto\ProductOrderOutputDto;
-use App\Dto\ProductOutputDto;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\ProductOrder;
@@ -16,9 +15,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class OrderService
 {
-    public const RESULT_ORDERS = 'orders';
-    public const RESULT_DESCRIPTION = 'description';
-
     public function __construct(
         private readonly EntityManagerInterface $entityManager
     )
