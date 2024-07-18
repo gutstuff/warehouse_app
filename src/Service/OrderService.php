@@ -24,33 +24,6 @@ class OrderService
     )
     {}
 
-    public function createOrder(OrderInputDto $orderInputDto): OrderOutputDto
-    {
-        $order = new Order();
-        $order->setDescription($orderInputDto->getDescription() ?? '-');
-        $order->setDateCreated(new \DateTime());
-
-        $productRepository = $this->entityManager
-            ->getRepository(Product::class);
-
-        foreach ($orderInputDto->getOrders() as $item) {
-            $productOrder = new ProductOrder();
-            $productOrder->setOrder($order);
-
-            $product = $productRepository->find($item->getId());
-            $productOrder->setProduct($product);
-            $productOrder->setCount($item->getCount());
-            $order->addProductOrder($productOrder);
-
-            $this->entityManager->persist($productOrder);
-        }
-
-        $this->entityManager->persist($order);
-        $this->entityManager->flush();
-
-        return $this->getOrder($order);
-    }
-
     public function getOrder(Order $order): OrderOutputDto
     {
         $vatPriceCalculator = new PriceCalculatorCollector([
@@ -85,7 +58,34 @@ class OrderService
             ->setSumVat($vatPriceCalculator->calculateCollection(
                 $order->getProductOrders()->toArray()
             ))
-        ;
+            ;
+    }
+
+    public function createOrder(OrderInputDto $orderInputDto): OrderOutputDto
+    {
+        $order = new Order();
+        $order->setDescription($orderInputDto->getDescription() ?? '-');
+        $order->setDateCreated(new \DateTime());
+
+        $productRepository = $this->entityManager
+            ->getRepository(Product::class);
+
+        foreach ($orderInputDto->getOrders() as $item) {
+            $productOrder = new ProductOrder();
+            $productOrder->setOrder($order);
+
+            $product = $productRepository->find($item->getId());
+            $productOrder->setProduct($product);
+            $productOrder->setCount($item->getCount());
+            $order->addProductOrder($productOrder);
+
+            $this->entityManager->persist($productOrder);
+        }
+
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
+
+        return $this->getOrder($order);
     }
 
     public function getOrderById(int $id): ?OrderOutputDto
