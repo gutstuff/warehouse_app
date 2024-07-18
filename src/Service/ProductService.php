@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Dto\ProductOutputDto;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,13 +25,13 @@ class ProductService
 
         $result = [];
         foreach ($products as $product) {
-            $result []= [
-                'product_id' => $product->getId(),
-                'name' => $product->getName(),
-                'description' => $product->getDescription() ?? '-',
-                'stock_availability' => $product->getStockAvailability(),
-                'net_price' => floatval($product->getNetPrice())
-            ];
+            $result []= (new ProductOutputDto())
+                ->setId($product->getId())
+                ->setName($product->getName())
+                ->setDescription($product->getDescription() ?? '-')
+                ->setStockAvailability($product->getStockAvailability())
+                ->setNetPrice(floatval($product->getNetPrice()))
+            ;
         }
 
         return $result;
