@@ -33,24 +33,16 @@ class OrderController extends AbstractController
         return $this->json($result);
     }
 
-    private function jsonErrorResponse(string $message): JsonResponse
-    {
-        return new JsonResponse([
-            'message' => $message
-        ], 500
-        );
-    }
-
     #[Route('/order/{id}', name: 'app_get_order', methods: ['GET'])]
     public function getOrder(Request $request): JsonResponse
     {
         $id = $request->get('id');
         if (!is_numeric($id) || $id < 1) {
-            return $this->jsonErrorResponse('Wrong order id');
+            return $this->json([],500);
         }
 
         if (!($order = $this->orderService->getOrderById($id))) {
-            return $this->jsonErrorResponse('Order not found');
+            return $this->json([],500);
         }
 
         return $this->json($order);
